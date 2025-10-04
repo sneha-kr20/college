@@ -8,11 +8,17 @@ include 'header.php';
 <html>
 <head>
   <title>College Management System</title>
+  <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-  <h1>Welcome to Our College</h1>
-  <p>This portal allows students, teachers, and admins to access scholarships, gallery, notices, and more.</p>
-  <p>Use the navigation menu above to explore.</p>
-</body>
+
+<!-- Page Content -->
+<h1>ABOUT JEHAL PRASAD TEACHERS TRAINING COLLEGE</h1>
+<h3>Welcome to Jehal Prasad Teachers Training College.</h3>
+<p>Our College was established in 2016, but session started for the batches in 2017.</p>
+<p>Use the navigation menu above to explore.</p>
+
 <?php include 'footer.php';?>
+</body>
 </html>

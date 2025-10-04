@@ -10,15 +10,9 @@ include 'header.php';
   <title>Programmes</title>
 </head>
 <body>
-  <?php include 'nav.php'; ?>
-
   <h1>Programmes Offered</h1>
   <ul>
-    <li>BSc Computer Science</li>
-    <li>BA Economics</li>
-    <li>BCom</li>
-    <li>BA Political Science</li>
-    <li>BBA</li>
+    <li>B.Ed.</li>
     <!-- Add more as needed -->
   </ul>
 </body>

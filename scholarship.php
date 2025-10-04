@@ -9,10 +9,16 @@ $result = $conn->query("SELECT * FROM scholarship ORDER BY created_at DESC");
 <html>
 <head>
   <title>Scholarship Students</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <p>
   <a href="scholarship_add.php">➕ Add New Scholarship Student</a>
 </p>
+<!-- Search Form -->
+<form method="GET" action="">
+    <input type="text" name="search" placeholder="Search students..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" style="padding:8px; width: 300px;">
+    <input type="submit" value="Search" style="padding:8px;">
+</form>
 
 <body>
   <h2>Scholarship Students</h2>
