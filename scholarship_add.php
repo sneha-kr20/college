@@ -1,25 +1,30 @@
-
 <?php
+session_start();
 include 'db.php';
-include 'navigation.php';
-include 'header.php';
 
-// If form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
-    $programme = $_POST['programme'];
-    $batch = $_POST['batch'];
-    $year = $_POST['year'];
-    $amount = $_POST['amount'];
+// Only allow admins or professors
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'professor'])) {
+    echo "<p style='color:red;'>❌ You do not have permission to add scholarship students.</p>";
+    exit;
+}
 
-    // Insert into DB
-    $sql = "INSERT INTO scholarship (name, programme, batch, year, amount)
-            VALUES ('$name', '$programme', '$batch', '$year', '$amount')";
+$message = "";
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = $conn->real_escape_string($_POST['name']);
+    $programme = $conn->real_escape_string($_POST['programme']);
+    $batch = $conn->real_escape_string($_POST['batch']);
+    $year = (int)$_POST['year'];
+    $amount = (float)$_POST['amount'];
+
+    $sql = "INSERT INTO scholarship (name, programme, batch, year, amount, added_on)
+            VALUES ('$name', '$programme', '$batch', $year, $amount, NOW())";
 
     if ($conn->query($sql) === TRUE) {
-        echo "<p style='color:green;'>✔ Student added successfully!</p>";
+        $message = "<p class='success'>✔ Student added successfully!</p>";
     } else {
-        echo "<p style='color:red;'>Error: " . $conn->error . "</p>";
+        $message = "<p class='error'>❌ Error: " . $conn->error . "</p>";
     }
 }
 ?>
@@ -27,22 +32,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Add Scholarship Student</title>
+    <title>Add Scholarship Student</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Add Scholarship Student</h2>
-  <form method="POST">
-    <label>Name:</label> <input type="text" name="name" required><br><br>
-    <label>Programme:</label> <input type="text" name="programme" required><br><br>
-    <label>Batch:</label> <input type="text" name="batch" required><br><br>
-    <label>Year:</label> <input type="number" name="year" required><br><br>
-    <label>Amount:</label> <input type="number" step="0.01" name="amount" required><br><br>
-    <button type="submit">Add Student</button>
-  </form>
-</body>
-<p>
-  <a href="scholarship.php">⬅ Back to Student List</a>
-</p>
-<?php include 'footer.php';?>
 
+<!-- Scholarship Add Modal -->
+<div class="modal show">
+  <div class="modal-content">
+    <span class="close" onclick="window.location='scholarship.php'">&times;</span>
+    <h2>Add Scholarship Student</h2>
+
+    <?= $message ?>
+
+    <form method="POST" class="scholarship-form">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="programme" placeholder="Programme" required>
+        <input type="text" name="batch" placeholder="Batch" required>
+        <input type="number" name="year" placeholder="Year" required>
+        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+
+        <button type="submit">Add Student</button>
+    </form>
+
+    <a href="scholarship.php" class="back-link"> Back to Scholarship List</a>
+  </div>
+</div>
+
+</body>
 </html>

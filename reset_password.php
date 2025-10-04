@@ -2,32 +2,43 @@
 session_start();
 include 'db.php';
 $message = "";
+$status = "error"; 
 
-// Handle reset request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $reg_id = $_POST['registration_id'];
+    $reg_id = trim($_POST['registration_id']);
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
     if ($new_password !== $confirm_password) {
         $message = "Passwords do not match!";
     } else {
-        $sql = "SELECT * FROM users WHERE registration_id='$reg_id' LIMIT 1";
-        $result = $conn->query($sql);
-        if ($result->num_rows == 1) {
-            $update = "UPDATE users SET password='$new_password' WHERE registration_id='$reg_id'";
-            if ($conn->query($update) === TRUE) {
+      
+        $stmt = $conn->prepare("SELECT id FROM users WHERE registration_id = ? LIMIT 1");
+        $stmt->bind_param("s", $reg_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+       
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+            $update = $conn->prepare("UPDATE users SET password = ? WHERE registration_id = ?");
+            $update->bind_param("ss", $hashed_password, $reg_id);
+
+            if ($update->execute()) {
                 $message = "Password updated successfully!";
+                $status = "success";
             } else {
                 $message = "Error updating password!";
             }
+            $update->close();
         } else {
             $message = "Registration ID not found!";
         }
+        $stmt->close();
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,14 +47,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<!-- Reset Password Modal -->
-<div class="modal">
+<div class="modal show"> 
     <div class="modal-content">
-        <span class="close" onclick="window.location='index.php'">&times;</span>
+        <a href="index.php" class="close">&times;</a>
         <h2>Reset Password</h2>
 
         <?php if($message != ""): ?>
-            <p class="<?= strpos($message) === 0 ? 'success' : 'error' ?>"><?= $message ?></p>
+            <p class="<?= $status ?>"><?= htmlspecialchars($message) ?></p>
         <?php endif; ?>
 
         <form method="POST" action="">

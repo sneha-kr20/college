@@ -1,56 +1,44 @@
-/*  Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/*  Body  */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #09080c;
-    line-height: 1.6;
-}
-
-/*  Container  */
-.container {
-    max-width: 1100px;
-    margin: 80px auto 80px auto; /* space for fixed header/footer */
-    padding: 25px;
-    background-color:  rgba(209, 225, 242, 0.9);
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(132, 80, 80, 0.1);
-}
-
-/* Reset  */
+/* ===========================
+   RESET & BASE STYLES
+=========================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/*  Body */
-body {
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: rgba(209, 225, 242, 0.9);
   color: #09080c;
   line-height: 1.6;
 }
 
-/* Apply padding only when nav is fixed (not on home) */
-body.fixed-nav-active {
-  padding-top: 70px;
+/* ===========================
+   CONTAINER & LAYOUT
+=========================== */
+.container {
+  flex: 1;
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 25px;
+  background-color: rgba(209, 225, 242, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(132, 80, 80, 0.1);
 }
 
-/*  Header  */
+/* ===========================
+   HEADER & NAVIGATION
+=========================== */
 .header-container {
   display: flex;
   width: 100%;
   box-shadow: 0 3px 6px rgba(80, 114, 142, 0.9);
 }
 
-/* Logo */
 .logo-container {
   background-color: rgba(209, 225, 242, 0.9);
   display: flex;
@@ -64,29 +52,12 @@ body.fixed-nav-active {
   width: auto;
 }
 
-/* Right side (college name + nav stacked vertically) */
 .right-container {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* College name (shown only on home) */
-.college-header {
-  background-color: rgba(209, 225, 242, 0.9);;
-  color: rgb(220, 217, 191);
-  display: flex;
-  align-items: center;
-  padding: 10px 30px;
-}
-
-.college-header h1 {
-  margin: 0;
-  font-size: 26px;
-  font-weight: bold;
-}
-
-/* Navigation bar */
 .main-nav {
   background-color: rgba(0, 64, 128, 0.9);
   display: flex;
@@ -97,7 +68,6 @@ body.fixed-nav-active {
   z-index: 1000;
 }
 
-/* Fixed nav (for other pages) */
 .fixed-nav {
   position: fixed;
   top: 0;
@@ -105,324 +75,412 @@ body.fixed-nav-active {
   right: 0;
 }
 
-/* Full nav version (used when only nav is shown) */
-.full-nav {
-  border-radius: 0;
+body.fixed-nav-active {
+  padding-top: 70px;
 }
 
-/* Navigation links */
-.main-nav .nav-links a {
-  color: white;
-  margin-right: 20px;
+.nav-links a,
+.nav-auth a {
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
-.main-nav .nav-links a:hover {
+.nav-links a {
+  color: white;
+  margin-right: 20px;
+}
+
+.nav-links a:hover {
   color: #f9f8f8;
 }
 
-/* Auth links */
-.main-nav .nav-auth a {
+.nav-auth a {
   color: rgb(220, 217, 191);
-  font-weight: 600;
-  text-decoration: none;
   margin-left: 10px;
 }
 
-.main-nav .nav-auth a:hover {
+.nav-auth a:hover {
   color: #ffffff;
 }
 
-
-/*  Footer */
+/* ===========================
+   FOOTER
+=========================== */
 .site-footer {
-    background-color: rgba(0, 64, 128, 0.95);
-    color: white;
-    padding: 10px 0;        /* smaller height (half of before) */
-    text-align: center;
-    box-shadow: 0 -3px 6px rgba(0,0,0,0.3);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    margin-top: auto;       /* push footer down */
+  background-color: rgba(0, 64, 128, 0.95);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  box-shadow: 0 -3px 6px rgba(0,0,0,0.3);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-top: auto;
 }
 
-/* Footer Text */
 .site-footer h3 {
-    margin: 0 0 5px 0;
-    font-size: 16px;
-    font-weight: bold;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .site-footer p {
-    margin: 3px 0;
-    font-size: 13px;
+  font-size: 13px;
+  margin: 3px 0;
 }
 
 .site-footer a {
-    color: #ffeb3b;
-    text-decoration: none;
-    font-weight: 600;
+  color: #ffeb3b;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .site-footer a:hover {
-    color: #ffffff;
-    text-decoration: underline;
+  color: #ffffff;
+  text-decoration: underline;
 }
 
-/*  Headings */
+/* ===========================
+   TYPOGRAPHY & LINKS
+=========================== */
 h1, h2, h3 {
-    color: #004080;
-    margin-bottom: 15px;
+  color: #004080;
+  margin-bottom: 15px;
 }
 
-/*  Paragraphs */
 p {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
-/*  Links  */
 a {
-    color: #004080;
-    text-decoration: underline;
+  color: #004080;
+  text-decoration: underline;
 }
 
 a:hover {
-    color: #0066cc;
+  color: #0066cc;
 }
 
-/* Modal Styling for reset form*/
-.modal {
-    display: block; 
-    position: fixed; 
-    z-index: 1000; 
-    left: 0;
-    top: 0;
+/* ===========================
+   BUTTONS
+=========================== */
+button,
+input[type="submit"],
+.btn {
+  background-color: #004080;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+.btn:hover {
+  background-color: #0066cc;
+}
+
+/* ===========================
+   ADD BUTTONS
+=========================== */
+.btn-add {
+  display: inline-block;
+  margin-bottom: 15px;
+  background-color: #004080;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-add:hover {
+  background-color: #0066cc;
+}
+
+/* ===========================
+   SEARCH BAR
+=========================== */
+.search-box {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.search-box form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-box input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-box button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #004080;
+  color: white;
+  font-weight: bold;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.search-box button:hover {
+  background-color: #0066cc;
+}
+
+/* ===========================
+   STUDENT TABLE
+=========================== */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  background-color: #ffffff;
+}
+
+table th {
+  background-color: #004080;
+  color: white;
+  font-weight: 600;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+table td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #e6f0ff;
+  transition: 0.3s;
+}
+
+/* Bottom buttons wrapper for privileged users */
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Centered button for non-privileged users */
+.center-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* ===========================
+   RESPONSIVE TABLES
+=========================== */
+@media screen and (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
     width: 100%;
-    height: 100%;
-    overflow: auto; 
-    background-color: rgba(0,0,0,0.5); 
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+  }
+
+  td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    text-align: left;
+  }
+
+  td::before {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #004080;
+  }
+
+  td:nth-of-type(1)::before { content: "Name"; }
+  td:nth-of-type(2)::before { content: "Programme"; }
+  td:nth-of-type(3)::before { content: "Batch"; }
+  td:nth-of-type(4)::before { content: "Year"; }
+  td:nth-of-type(5)::before { content: "Amount"; }
+  td:nth-of-type(6)::before { content: "Added On"; }
+}
+
+/* ===========================
+   GALLERY BOX
+=========================== */
+.gallery-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.gallery-item {
+  width: 300px;    
+  height: 250px;   
+  background: #fff;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.gallery-image {
+  max-width: 100%;
+  max-height: 200px; 
+  object-fit: contain; 
+  background: #fff;
+}
+
+.gallery-caption {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 5px;
+  height: 30px;       
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 90%;
+}
+
+/* ===========================
+   UNIVERSAL MODAL (Login, Forgot, Add Notice, Add Photo)
+=========================== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal.show {
+  display: block;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; 
-    padding: 20px;
-    border-radius: 10px;
-    width: 320px; 
-    text-align: center;
-    position: relative;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  background-color: #fefefe;
+  margin: 8% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.modal-content h2 {
+  color: #004080;
+  margin-bottom: 15px;
 }
 
 .modal-content input[type="text"],
 .modal-content input[type="password"],
-.modal-content input[type="email"] {
-    width: 90%;
-    padding: 8px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.modal-content input[type="email"],
+.modal-content input[type="file"],
+.modal-content textarea {
+  width: 90%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .modal-content button {
-    background-color: #004080;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s ease;
+  background-color: #004080;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
 }
 
 .modal-content button:hover {
-    background-color: #114579;
-}
-
-.close {
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: red;
-}
-
-p.error {
-    color: red;
-    margin-bottom: 10px;
-}
-
-p.success {
-    color: green;
-    margin-bottom: 10px;
+  background-color: #114579;
 }
 
 .modal-content a {
-    color: #004080;
-    text-decoration: underline;
+  color: #004080;
+  text-decoration: underline;
 }
 
 .modal-content a:hover {
-    color: #0066cc;
+  color: #0066cc;
 }
 
-/* Buttons */
-button, input[type="submit"], .btn {
-    background-color: #004080;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    font-weight: bold;
+.close {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-button:hover, input[type="submit"]:hover, .btn:hover {
-    background-color: #0066cc;
-}
+@media screen and (max-width: 480px) {
+  .modal-content {
+    padding: 15px;
+    width: 95%;
+    margin: 15% auto;
+  }
 
-/* Table Wrapper */
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin-bottom: 20px;
-}
+  .modal-content input,
+  .modal-content textarea,
+  .modal-content button {
+    font-size: 16px;
+  }
 
-/* Tables  */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 600px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    background-color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-table th {
-    background-color: #004080;
-    color: white;
-    font-weight: 600;
-    padding: 12px 15px;
-    text-align: left;
-}
-
-table td {
-    padding: 10px 15px;
-    border-bottom: 1px solid #ddd;
-    color: #333;
-}
-
-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-table tr:hover {
-    background-color: #e6f0ff;
-    transition: 0.3s;
-}
-
-/*  Responsive Table: Stacked rows  */
-@media screen and (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-        width: 100%;
-    }
-
-    thead tr {
-        display: none;
-    }
-
-    tr {
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        background: #fff;
-    }
-
-    td {
-        border: none;
-        position: relative;
-        padding-left: 50%;
-        text-align: left;
-    }
-
-    td::before {
-        position: absolute;
-        top: 10px;
-        left: 15px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: bold;
-        color: #004080;
-    }
-
-    /* Column Labels for Scholarship Table (modify per table) */
-    td:nth-of-type(1)::before { content: "Name"; }
-    td:nth-of-type(2)::before { content: "Programme"; }
-    td:nth-of-type(3)::before { content: "Batch"; }
-    td:nth-of-type(4)::before { content: "Year"; }
-    td:nth-of-type(5)::before { content: "Amount"; }
-    td:nth-of-type(6)::before { content: "Added On"; }
-}
-
-/*  Add New Button Styling  */
-a[href*="add"], a[href*="scholarship_add"], a[href*="news_add"], a[href*="gallery_add"] {
-    display: inline-block;
-    margin-bottom: 15px;
-    background-color: #004080;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background 0.3s ease;
-}
-
-a[href*="add"]:hover,
-a[href*="scholarship_add"]:hover,
-a[href*="news_add"]:hover,
-a[href*="gallery_add"]:hover {
-    background-color: #0066cc;
-}
-
-/* Responsive Adjustments  */
-@media screen and (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    nav .links {
-        flex-direction: column;
-        width: 100%;
-    }
-    nav .links a {
-        margin: 5px 0;
-    }
-    nav .auth {
-        margin-top: 5px;
-    }
-}
-
-/* footer stays at bottom */
-html, body {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    flex: 1;  
+  .close {
+    font-size: 24px;
+    top: 10px;
+    right: 10px;
+  }
 }

@@ -1,5 +1,4 @@
 <?php
-//session_start();
 include 'db.php';
 include 'navigation.php';
 include 'header.php';
@@ -17,7 +16,7 @@ $result = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
   <?php
   // ✅ Show Add Notice link only if user logged in AND has permission
   if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin','teacher','professor','principal','director'])): ?>
-    <p><a href="news_add.php">➕ Add New Notice</a></p>
+    <p><a href="news_add.php">+Add New Notice</a></p>
   <?php endif; ?>
 
   <?php while($row = $result->fetch_assoc()): ?>
