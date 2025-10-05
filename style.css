@@ -27,7 +27,7 @@ html, body {
   padding: 25px;
   background-color: rgba(209, 225, 242, 0.9);
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(132, 80, 80, 0.1);
+  /* box-shadow: 0 6px 15px rgba(132, 80, 80, 0.1); */
 }
 
 /* ===========================
