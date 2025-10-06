@@ -12,7 +12,7 @@ html, body {
   display: flex;
   flex-direction: column;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: rgba(209, 225, 242, 0.9);
+  background-color: white;
   color: #09080c;
   line-height: 1.6;
 }
@@ -25,7 +25,7 @@ html, body {
   max-width: 1100px;
   margin: 80px auto;
   padding: 25px;
-  background-color: rgba(209, 225, 242, 0.9);
+  background-color:white;
   border-radius: 12px;
   /* box-shadow: 0 6px 15px rgba(132, 80, 80, 0.1); */
 }
@@ -36,11 +36,11 @@ html, body {
 .header-container {
   display: flex;
   width: 100%;
-  box-shadow: 0 3px 6px rgba(80, 114, 142, 0.9);
+  box-shadow: 0 3px 6px white;
 }
 
 .logo-container {
-  background-color: rgba(209, 225, 242, 0.9);
+  background-color:white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,6 +102,118 @@ body.fixed-nav-active {
 
 .nav-auth a:hover {
   color: #ffffff;
+}
+/* ===========================
+   HEADER
+=========================== */
+.header-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+  background-color: #fff; /* make header background white to match body */
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.logo-container .logo {
+  height: 70px; /* slightly larger */
+  width: auto;
+}
+
+.college-header {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.college-header h1 {
+  font-size: 28px;
+  color: #004080;
+  margin: 0;
+}
+
+/* NAVIGATION */
+.main-nav {
+  display: flex;
+  justify-content: center; /* center nav */
+  flex-wrap: wrap;
+  background-color: #004080;
+  padding: 12px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-radius: 0 0 10px 10px;
+}
+
+.nav-links, .nav-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-links a, .nav-auth a {
+  color: white;
+  text-decoration: none;
+  margin: 5px 15px;
+  font-weight: 600;
+}
+
+.nav-links a:hover, .nav-auth a:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+.site-footer {
+  background-color: #004080;
+  color: white;
+  padding: 20px 15px;
+  text-align: center;
+  margin-top: auto;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -3px 6px rgba(0,0,0,0.15);
+}
+
+.site-footer p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.site-footer a {
+  color: #ffeb3b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+/* ===========================
+   RESPONSIVE HEADER & FOOTER
+=========================== */
+@media screen and (max-width: 768px) {
+  .logo-container .logo { height: 60px; }
+  .college-header h1 { font-size: 24px; }
+  .nav-links a, .nav-auth a { margin: 5px 10px; font-size: 14px; }
+  .site-footer { padding: 15px 10px; font-size: 13px; }
+}
+
+@media screen and (max-width: 480px) {
+  .logo-container .logo { height: 50px; }
+  .college-header h1 { font-size: 20px; }
+  .nav-links a, .nav-auth a { margin: 3px 6px; font-size: 13px; }
+  .site-footer { padding: 12px 8px; font-size: 12px; }
 }
 
 /* ===========================
@@ -299,53 +411,6 @@ table tr:hover {
 }
 
 /* ===========================
-   RESPONSIVE TABLES
-=========================== */
-@media screen and (max-width: 768px) {
-  table, thead, tbody, th, td, tr {
-    display: block;
-    width: 100%;
-  }
-
-  thead tr {
-    display: none;
-  }
-
-  tr {
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    background: #fff;
-  }
-
-  td {
-    border: none;
-    position: relative;
-    padding-left: 50%;
-    text-align: left;
-  }
-
-  td::before {
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
-    font-weight: bold;
-    color: #004080;
-  }
-
-  td:nth-of-type(1)::before { content: "Name"; }
-  td:nth-of-type(2)::before { content: "Programme"; }
-  td:nth-of-type(3)::before { content: "Batch"; }
-  td:nth-of-type(4)::before { content: "Year"; }
-  td:nth-of-type(5)::before { content: "Amount"; }
-  td:nth-of-type(6)::before { content: "Added On"; }
-}
-
-/* ===========================
    GALLERY BOX
 =========================== */
 .gallery-container {
@@ -465,22 +530,286 @@ table tr:hover {
   cursor: pointer;
 }
 
+/* ===========================
+   BASE STYLES (Mobile First)
+=========================== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+/* Modal base */
+.modal-content {
+  padding: 20px;
+  width: 90%;
+  margin: 10% auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content button {
+  width: 100%;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.close {
+  font-size: 24px;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+}
+
+/* Navigation base */
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+  background-color: #004080;
+  color: white;
+}
+
+.nav-links a,
+.nav-auth a {
+  color: white;
+  text-decoration: none;
+  margin: 5px 10px;
+}
+
+.nav-links a:hover,
+.nav-auth a:hover {
+  text-decoration: underline;
+}
+
+/* Table base */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+thead {
+  background-color: #eaeaea;
+}
+/* ===========================
+   BASE STYLES (applies to all)
+=========================== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+/* Default table layout */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  table-layout: auto;
+  word-wrap: break-word;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+thead {
+  background-color: #eaeaea;
+}
+
+/* Modal defaults */
+.modal-content {
+  padding: 20px;
+  width: 70%;
+  margin: 5% auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Nav defaults */
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 15px 40px;
+  background-color: #004080;
+  color: white;
+}
+
+.nav-links a,
+.nav-auth a {
+  color: white;
+  text-decoration: none;
+  margin: 5px 10px;
+  font-size: 15px;
+}
+
+/* ===========================
+   MOBILE (max-width: 480px)
+=========================== */
 @media screen and (max-width: 480px) {
   .modal-content {
-    padding: 15px;
     width: 95%;
     margin: 15% auto;
+    padding: 15px;
   }
 
-  .modal-content input,
-  .modal-content textarea,
-  .modal-content button {
+  .main-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  .nav-links, .nav-auth {
+    margin-top: 10px;
+  }
+
+  .nav-links a, .nav-auth a {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* Mobile stacked table */
+  table, thead, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    position: relative;
+    padding-left: 45%;
+    text-align: left;
+  }
+
+  td::before {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 40%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #004080;
+  }
+
+  /* Replace with your column headers */
+  td:nth-of-type(1)::before { content: "Name"; }
+  td:nth-of-type(2)::before { content: "Programme"; }
+  td:nth-of-type(3)::before { content: "Batch"; }
+  td:nth-of-type(4)::before { content: "Year"; }
+  td:nth-of-type(5)::before { content: "Amount"; }
+  td:nth-of-type(6)::before { content: "Added On"; }
+}
+
+/* ===========================
+   TABLET (max-width: 768px)
+=========================== */
+@media screen and (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    margin: 10% auto;
+  }
+
+  .main-nav {
+    padding: 10px 30px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+}
+
+/* ===========================
+   SMALL LAPTOP (max-width: 1024px)
+=========================== */
+@media screen and (max-width: 1024px) {
+  .modal-content {
+    width: 80%;
+    margin: 8% auto;
+  }
+
+  .main-nav {
+    padding: 10px 30px;
+  }
+
+  table {
+    width: 95%;
+    margin: 0 auto;
+    table-layout: fixed; /* ✅ prevents stretching/overlap */
+  }
+
+  th, td {
+    padding: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* ===========================
+   DESKTOP (min-width: 1025px)
+=========================== */
+@media screen and (min-width: 1025px) {
+  .modal-content {
+    width: 60%;
+    margin: 5% auto;
+  }
+
+  .main-nav {
+    padding: 15px 60px;
+  }
+
+  .nav-links a, .nav-auth a {
     font-size: 16px;
   }
 
-  .close {
-    font-size: 24px;
-    top: 10px;
-    right: 10px;
+  table {
+    width: 90%;
+    margin: 0 auto;
+    table-layout: auto;
+  }
+
+  th, td {
+    font-size: 15px;
   }
 }
