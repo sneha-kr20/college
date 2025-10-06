@@ -15,7 +15,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // detect current file
     <?php if ($current_page === 'index.php'): ?>
         <!-- ===== HOME PAGE HEADER (Logo + College Name + Navigation) ===== -->
         <div class="logo-container">
-            <img src="images/name.png" alt="College Logo" class="logo">
+            <!-- <img src="images/name.png" alt="College Logo" class="logo"> -->
         </div>
 
         <div class="right-container">
