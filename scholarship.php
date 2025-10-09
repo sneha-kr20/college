@@ -2,248 +2,183 @@
 include 'db.php';
 include 'navigation.php';
 include 'header.php';
+include 'tailwind.php';
 
-$searchTerm = strtolower($_GET['search'] ?? '');
+$searchTerm = strtolower(trim($_GET['search'] ?? ''));
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-$query = "SELECT * FROM scholarship";
-if ($searchTerm !== '') {
-    $query .= " WHERE LOWER(name) LIKE '%" . $conn->real_escape_string($searchTerm) . "%'";
+// Get all distinct years in descending order (newest first)
+$yearsResult = $conn->query("SELECT DISTINCT year FROM scholarship ORDER BY year DESC");
+$years = [];
+while ($r = $yearsResult->fetch_assoc()) {
+    $years[] = $r['year'];
 }
-$query .= " ORDER BY name ASC";
 
-$allStudents = $conn->query($query);
+// Determine the current year based on page
+$totalYears = count($years);
+$currentYear = $years[$page - 1] ?? $years[0] ?? date('Y');
+
+// Fetch scholarship students for the current year
+if ($searchTerm !== '') {
+    $stmt = $conn->prepare("
+        SELECT * FROM scholarship 
+        WHERE year = ? AND LOWER(name) LIKE CONCAT('%', ?, '%') 
+        ORDER BY name ASC
+    ");
+    $stmt->bind_param("is", $currentYear, $searchTerm);
+} else {
+    $stmt = $conn->prepare("SELECT * FROM scholarship WHERE year = ? ORDER BY name ASC");
+    $stmt->bind_param("i", $currentYear);
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
 $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin', 'professor']);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scholarship Students - Jehal Prasad Teachers Training College</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: white;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    /* Main container */
-    main.scholarship-container {
-      flex: 1;
-      width: 100%;
-      max-width: 1200px;
-      margin: 80px auto 40px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 0 15px;
-      box-sizing: border-box;
-    }
-
-    /* Search bar */
-    .search-box {
-      grid-column: 1 / -1;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .search-box form {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .search-box input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      font-size: 14px;
-    }
-
-    .search-box button {
-      padding: 10px 15px;
-      background-color: #004080;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .search-box button:hover {
-      background-color: #0066cc;
-    }
-
-    /* Add Student button */
-    .add-link {
-      grid-column: 1 / -1;
-      display: inline-block;
-      margin: 0 auto 20px auto;
-      text-align: center;
-      background-color: #004080;
-      color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    .add-link:hover {
-      background-color: #0066cc;
-    }
-
-    /* Student cards */
-    .student-card {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 15px;
-      background-color: #fefefe;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-      box-sizing: border-box;
-    }
-
-    .student-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .student-card h3 {
-      font-size: 18px;
-      color: #004080;
-      margin-bottom: 8px;
-      text-align: left;
-    }
-
-    .student-card p {
-      font-size: 14px;
-      margin: 4px 0;
-      line-height: 1.4;
-      word-wrap: break-word;
-      width: 100%;
-    }
-
-    /* Footer consistency */
-    .site-footer {
-      width: 100%;
-      background-color: rgba(0, 64, 128, 0.95);
-      color: white;
-      padding: 20px 10px;
-      text-align: center;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      box-sizing: border-box;
-      margin-top: auto;
-      font-size: 14px;
-    }
-
-    .site-footer a {
-      color: #ffeb3b;
-      text-decoration: none;
-      font-weight: 600;
-      margin: 0 5px;
-    }
-
-    .site-footer a:hover {
-      color: #ffffff;
-      text-decoration: underline;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      main.scholarship-container {
-        grid-template-columns: 1fr;
-      }
-
-      .student-card {
-        padding: 12px;
-      }
-
-      .student-card h3 {
-        font-size: 16px;
-      }
-
-      .student-card p {
-        font-size: 13px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .search-box form {
-        flex-direction: column;
-        gap: 8px;
-        width: 90%;
-      }
-
-      .search-box input[type="text"] {
-        width: 100%;
-        border-radius: 5px;
-      }
-
-      .search-box button {
-        width: 100%;
-        border-radius: 5px;
-      }
-
-      .site-footer {
-        padding: 18px 8px;
-        font-size: 13px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Students</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-<main class="scholarship-container">
+<body class="bg-white font-sans text-gray-900">
 
-  <!-- Search bar -->
-  <div class="search-box">
-    <form method="GET" action="">
-      <input type="text" name="search" placeholder="Search student name..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-      <button type="submit">Search</button>
+<div class="max-w-7xl mx-auto px-4 py-10">
+
+  <!-- Search + Add button -->
+  <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <form method="GET" class="flex flex-1 gap-2">
+      <input type="text" name="search" placeholder="Search student name..."
+        value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
+        class="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-collegeblue">
+      <button type="submit" class="bg-collegeblue text-white px-4 py-2 rounded-md hover:bg-blue-700 font-semibold">
+        Search
+      </button>
     </form>
+
+    <?php if ($isPrivileged): ?>
+      <a href="scholarship_add.php"
+         class="bg-collegeblue text-white px-4 py-2 rounded-md hover:bg-blue-700 font-semibold text-center">
+         + Add Student
+      </a>
+    <?php endif; ?>
   </div>
 
-  <!-- Add Student button (for privileged users only) -->
-  <?php if ($isPrivileged): ?>
-    <a href="scholarship_add.php" class="add-link">+ Add New Student</a>
-  <?php endif; ?>
+  <!-- Desktop Table -->
+  <div class="hidden md:block overflow-x-auto">
+    <table class="min-w-full border border-gray-200 rounded-lg divide-y divide-gray-200">
+      <thead class="bg-collegeblue text-white">
+        <tr>
+          <th class="px-4 py-2 text-left">Name</th>
+          <th class="px-4 py-2 text-left">Registration No</th>
+          <th class="px-4 py-2 text-left">Programme</th>
+          <th class="px-4 py-2 text-left">Batch</th>
+          <th class="px-4 py-2 text-left">Year</th>
+          <th class="px-4 py-2 text-left">Amount (₹)</th>
+          <th class="px-4 py-2 text-left">Added On</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody" class="divide-y divide-gray-200">
+        <?php if ($result->num_rows > 0): ?>
+          <?php $i=0; while($row = $result->fetch_assoc()): ?>
+            <tr class="<?= $i >= 5 ? 'hidden extraRow' : '' ?>">
+              <td class="px-4 py-2"><?= htmlspecialchars($row['name']) ?></td>
+              <td class="px-4 py-2"><?= htmlspecialchars($row['registration_id'] ?? '-') ?></td>
+              <td class="px-4 py-2"><?= htmlspecialchars($row['programme']) ?></td>
+              <td class="px-4 py-2"><?= htmlspecialchars($row['batch']) ?></td>
+              <td class="px-4 py-2"><?= htmlspecialchars($row['year']) ?></td>
+              <td class="px-4 py-2">₹<?= number_format($row['amount'], 2) ?></td>
+              <td class="px-4 py-2"><?= htmlspecialchars($row['added_on'] ?? '-') ?></td>
+            </tr>
+          <?php $i++; endwhile; ?>
+        <?php else: ?>
+          <tr><td colspan="7" class="text-center py-6 text-gray-500">No students found.</td></tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
 
-  <!-- Scholarship cards -->
-  <?php if ($allStudents && $allStudents->num_rows > 0): ?>
-    <?php while ($row = $allStudents->fetch_assoc()): ?>
-      <div class="student-card">
-        <h3><?= htmlspecialchars($row['name']) ?></h3>
-        <p><strong>Registration No:</strong> <?= htmlspecialchars($row['registration_id'] ?? '-') ?></p>
-        <p><strong>Programme:</strong> <?= htmlspecialchars($row['programme']) ?></p>
-        <p><strong>Batch:</strong> <?= htmlspecialchars($row['batch']) ?></p>
-        <p><strong>Year:</strong> <?= htmlspecialchars($row['year']) ?></p>
-        <p><strong>Amount:</strong> ₹<?= number_format($row['amount'], 2) ?></p>
-        <p><strong>Added On:</strong> <?= htmlspecialchars($row['added_on'] ?? '-') ?></p>
+  <!-- Mobile Cards -->
+  <div class="md:hidden space-y-4">
+    <?php
+    $result->data_seek(0);
+    while($row = $result->fetch_assoc()):
+    ?>
+      <div class="border rounded-lg shadow p-4">
+        <div class="flex justify-between items-center">
+          <h3 class="font-semibold text-collegeblue"><?= htmlspecialchars($row['name']) ?></h3>
+          <button class="toggleDetails text-collegeblue font-bold text-lg">+</button>
+        </div>
+        <div class="mt-2 hidden text-sm space-y-1">
+          <p><strong>Reg. No:</strong> <?= htmlspecialchars($row['registration_id'] ?? '-') ?></p>
+          <p><strong>Programme:</strong> <?= htmlspecialchars($row['programme']) ?></p>
+          <p><strong>Batch:</strong> <?= htmlspecialchars($row['batch']) ?></p>
+          <p><strong>Year:</strong> <?= htmlspecialchars($row['year']) ?></p>
+          <p><strong>Amount:</strong> ₹<?= number_format($row['amount'], 2) ?></p>
+          <p><strong>Added On:</strong> <?= htmlspecialchars($row['added_on'] ?? '-') ?></p>
+        </div>
       </div>
     <?php endwhile; ?>
-  <?php else: ?>
-    <div class="student-card">
-      <p style="text-align:center;">No scholarship students found.</p>
-    </div>
+  </div>
+
+  <!-- Show More / Less Button for Desktop -->
+  <?php if ($result->num_rows > 5): ?>
+  <div class="text-center mt-4">
+    <button id="toggleTable" class="bg-collegeblue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+      Show More
+    </button>
+  </div>
   <?php endif; ?>
 
-</main>
+  <!-- Year Pagination -->
+  <div class="flex justify-center items-center gap-3 mt-10">
+    <?php if ($page > 1): ?>
+      <a href="?page=<?= $page - 1 ?>" 
+         class="px-4 py-2 bg-collegeblue text-white rounded-md hover:bg-blue-700 transition">
+         ← Older Year
+      </a>
+    <?php endif; ?>
+
+    <span class="text-gray-700 font-medium">
+      Page <?= $page ?> of <?= $totalYears ?>
+    </span>
+
+    <?php if ($page < $totalYears): ?>
+      <a href="?page=<?= $page + 1 ?>" 
+         class="px-4 py-2 bg-collegeblue text-white rounded-md hover:bg-blue-700 transition">
+         Newer Year →
+      </a>
+    <?php endif; ?>
+  </div>
+
+</div>
+
+<script>
+// Show more/less for desktop
+const toggleBtn = document.getElementById('toggleTable');
+if (toggleBtn) {
+  const extraRows = document.querySelectorAll('.extraRow');
+  let expanded = false;
+  toggleBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    extraRows.forEach(r => r.classList.toggle('hidden', !expanded));
+    toggleBtn.textContent = expanded ? 'Show Less' : 'Show More';
+  });
+}
+
+// Mobile card toggle
+document.querySelectorAll('.toggleDetails').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const details = btn.parentElement.nextElementSibling;
+    details.classList.toggle('hidden');
+    btn.textContent = details.classList.contains('hidden') ? '+' : '–';
+  });
+});
+</script>
 
 <?php include 'footer.php'; ?>
 </body>

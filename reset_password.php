@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db.php';
+include 'tailwind.php';
 $message = "";
 $status = "error"; 
 
@@ -19,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = $stmt->get_result();
 
         if ($result->num_rows === 1) {
-       
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
             $update = $conn->prepare("UPDATE users SET password = ? WHERE registration_id = ?");
@@ -39,32 +39,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Reset Password - Jehal Prasad TTC</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="bg-gray-50 font-sans flex items-center justify-center min-h-screen p-4">
 
-<div class="modal show"> 
-    <div class="modal-content">
-        <a href="index.php" class="close">&times;</a>
-        <h2>Reset Password</h2>
+<div class="bg-white rounded-xl shadow-lg w-full max-w-sm p-8 relative">
+    <!-- Close button -->
+    <a href="index.php" class="absolute top-4 right-4 text-2xl text-gray-600 font-bold hover:text-red-500">&times;</a>
 
-        <?php if($message != ""): ?>
-            <p class="<?= $status ?>"><?= htmlspecialchars($message) ?></p>
-        <?php endif; ?>
+    <h2 class="text-2xl font-bold text-collegeblue mb-6 text-center">Reset Password</h2>
 
-        <form method="POST" action="">
-            <input type="text" name="registration_id" placeholder="Registration ID" required><br><br>
-            <input type="password" name="new_password" placeholder="New Password" required><br><br>
-            <input type="password" name="confirm_password" placeholder="Confirm Password" required><br><br>
-            <button type="submit">Reset Password</button>
-        </form>
+    <!-- Message -->
+    <?php if($message != ""): ?>
+        <p class="<?= $status === 'success' ? 'text-green-600' : 'text-red-600' ?> font-semibold mb-4">
+            <?= htmlspecialchars($message) ?>
+        </p>
+    <?php endif; ?>
 
-        <p><a href="login.php">Back to Login</a></p>
-    </div>
+    <form method="POST" action="" class="flex flex-col gap-4">
+        <input type="text" name="registration_id" placeholder="Registration ID" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+
+        <input type="password" name="new_password" placeholder="New Password" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+
+        <button type="submit"
+                class="bg-collegeblue text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition-colors">
+            Reset Password
+        </button>
+    </form>
+
+    <p class="mt-4 text-center">
+        <a href="login.php" class="text-collegeblue hover:underline font-semibold">
+            Back to Login
+        </a>
+    </p>
 </div>
 
 </body>

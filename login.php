@@ -33,28 +33,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              collegeblue: '#004080'
+            },
+            fontFamily: {
+              sans: ['Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
 </head>
-<body>
+<body class="bg-gray-50 font-sans flex items-center justify-center min-h-screen p-4">
 
-<div id="loginModal" class="modal show"> 
-    <div class="modal-content">
-        <a href="index.php" class="close">&times;</a>
-        <h2>User Login</h2>
-        <?php if($message != ""): ?>
-            <p class="error"><?= htmlspecialchars($message) ?></p>
-        <?php endif; ?>
+<div class="bg-white rounded-xl shadow-lg w-full max-w-sm p-8 relative">
+    <!-- Close button -->
+    <a href="index.php" class="absolute top-4 right-4 text-2xl text-gray-600 font-bold hover:text-red-500">&times;</a>
 
-        <form method="POST" action="">
-            <input type="text" name="registration_id" placeholder="Registration ID" required><br><br>
-            <input type="password" name="password" placeholder="Password" required><br><br>
-            <button type="submit">Login</button>
-        </form>
-        <p><a href="reset_password.php">Forgot Password?</a></p>
-    </div>
+    <h2 class="text-2xl font-bold text-collegeblue mb-6 text-center">User Login</h2>
+
+    <!-- Message -->
+    <?php if($message != ""): ?>
+        <p class="text-red-600 font-semibold mb-4"><?= htmlspecialchars($message) ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="" class="flex flex-col gap-4">
+        <input type="text" name="registration_id" placeholder="Registration ID" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+
+        <input type="password" name="password" placeholder="Password" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+
+        <button type="submit"
+                class="bg-collegeblue text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition-colors">
+            Login
+        </button>
+    </form>
+
+    <p class="mt-4 text-center">
+        <a href="reset_password.php" class="text-collegeblue hover:underline font-semibold">
+            Forgot Password?
+        </a>
+    </p>
 </div>
 
 </body>

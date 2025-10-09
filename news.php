@@ -125,7 +125,7 @@ $result = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
       width: 100%;                  /* Full width */
       background-color: rgba(0, 64, 128, 0.95);
       color: white;
-      padding: 20px 10px;           /* Taller padding for visibility */
+      padding: 1px 10px;           /* Taller padding for visibility */
       text-align: center;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
@@ -137,7 +137,7 @@ $result = $conn->query("SELECT * FROM news ORDER BY created_at DESC");
     .site-footer a {
       color: #ffeb3b;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 550;
       margin: 0 5px;
     }
 
