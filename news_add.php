@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-
+include 'tailwind.php';
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -49,23 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8">
   <title>Add News / Notice</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            collegeblue: '#004080'
-          },
-          fontFamily: {
-            sans: ['Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
 </head>
 <body class="bg-gray-50 font-sans flex items-center justify-center min-h-screen p-4">
 

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db.php';
+include 'tailwind.php';
 
 // Only allow admins or professors
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'professor'])) {
@@ -36,18 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Add Scholarship Student</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { collegeblue: '#004080' },
-                    fontFamily: { sans: ['Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-gray-50 font-sans flex items-center justify-center min-h-screen p-4">
 
