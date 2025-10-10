@@ -31,14 +31,13 @@ $totalPages = ceil($totalRows / $limit);
 </head>
 <body class="min-h-screen flex flex-col font-sans text-gray-800">
   
-
 <!-- Main -->
 <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-10">
 
+
   <!-- Heading -->
-  <div class="text-center mb-10 fade-in-up">
-    <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoomPulse">
-      <!-- <span class="inline-block animate-float mr-2">🖼️</span>  -->
+  <div class="text-center mb-10 fade-in-up relative">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoom-pulse">
       Gallery
     </h1>
     <div class="mt-3">

@@ -17,11 +17,17 @@ include 'tailwind.php';
   <!-- Programmes Page Container -->
   <main class="max-w-6xl mx-auto my-24 p-6 md:p-12 rounded-3xl bg-white shadow-glow">
 
-    <!-- Heading -->
-    <h1 class="text-3xl md:text-5xl font-extrabold text-collegeblue text-center mb-10 
-               animate-fade-in page-heading-glow">
-      Programmes Offered
+    
+  <!-- Heading -->
+  <div class="text-center mb-10 fade-in-up relative">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoom-pulse">
+      Our Programme
     </h1>
+    <div class="mt-3">
+      <div class="h-1 w-20 mx-auto bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"></div>
+      <div class="h-0.5 w-10 mx-auto bg-blue-500/70 mt-1 rounded-full"></div>
+    </div>
+  </div>
 
     <!-- Introduction -->
     <p class="mb-6 text-gray-800 text-lg md:text-xl leading-relaxed">

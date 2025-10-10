@@ -23,17 +23,17 @@ $result = $conn->query("SELECT id, title, content, file_path, created_at FROM ne
   <!-- Main Section -->
   <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-10">
 
-    <!-- Animated Heading -->
-    <div class="text-center mb-10 fade-in-up">
-      <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoomPulse">
-        <!-- <span class="inline-block animate-float mr-2">📢</span> -->
-         Announcements 
-      </h1>
-      <div class="mt-3">
-        <div class="h-1 w-20 mx-auto bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"></div>
-        <div class="h-0.5 w-10 mx-auto bg-blue-500/70 mt-1 rounded-full"></div>
-      </div>
+    
+  <!-- Heading -->
+  <div class="text-center mb-10 fade-in-up relative">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoom-pulse">
+     Announcements
+    </h1>
+    <div class="mt-3">
+      <div class="h-1 w-20 mx-auto bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"></div>
+      <div class="h-0.5 w-10 mx-auto bg-blue-500/70 mt-1 rounded-full"></div>
     </div>
+  </div>
 
     <!-- Notice Cards -->
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 fade-in-up">
