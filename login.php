@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-include 'components.php'; // optional, not used in login
+include 'components.php'; 
 $message = "";
 
 // Handle login
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['name'] = $user['name'];
 
             header("Location: index.php");
-            exit(); // stop execution after redirect
+            exit(); 
         } else {
             $message = "Wrong password!";
         }

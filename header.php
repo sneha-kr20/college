@@ -6,15 +6,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $page_add_links = [
     'gallery.php' => 'gallery_add.php',
     'news.php' => 'news_add.php',
-    'scholarship.php' => 'scholarship_add.php',
-    'programmes.php' => 'programmes_add.php'
+    'scholarship.php' => 'scholarship_add.php'
 ];
 $add_link = $page_add_links[$current_page] ?? null;
 ?>
 <header class="w-full relative z-50">
 
 <?php if($current_page == 'index.php'): ?>
-<!-- 🌟 Home Page Header -->
+<!--  Home Page Header -->
 <div class="relative overflow-hidden bg-gradient-to-r from-blue-500 via-blue-300 to-blue-600 p-8 md:p-16 text-white shadow-xl">
 
     <!-- Animated Glow Circles -->

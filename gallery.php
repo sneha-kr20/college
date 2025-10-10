@@ -96,10 +96,12 @@ $totalPages = ceil($totalRows / $limit);
 
           <!-- Delete Button -->
           <?php if(isset($_SESSION['role']) && in_array($_SESSION['role'], $allowed_roles)): ?>
-            <form action="gallery_delete.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this image?');" class="mt-4">
-              <input type="hidden" name="id" value="<?= htmlspecialchars($row['id']) ?>">
-              <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-2 rounded-xl hover:from-red-600 hover:to-red-700 shadow-sm hover:shadow-md transition-all duration-300 btn-hover">
-                🗑 Delete Image
+            <a href="delete.php?type=gallery&id=<?= $row['id'] ?>"
+                onclick="return confirm('Are you sure you want to delete this image?');"
+                class="block w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-2 rounded-xl hover:from-red-600 hover:to-red-700 shadow-sm hover:shadow-md transition-all duration-300 text-center">
+               🗑 Delete Image
+            </a>
+
               </button>
             </form>
           <?php endif; ?>
@@ -108,7 +110,7 @@ $totalPages = ceil($totalRows / $limit);
       <?php endwhile; ?>
     <?php else: ?>
       <div class="col-span-full text-center text-gray-500 text-lg bg-white/70 backdrop-blur-sm rounded-2xl py-16 shadow-inner">
-        No images available 📭
+        No images available!!
       </div>
     <?php endif; ?>
   </div>

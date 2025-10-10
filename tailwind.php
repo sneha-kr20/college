@@ -22,7 +22,7 @@ tailwind.config = {
 </script>
 
 <style>
-/* 🌈 Animated Gradient Background */
+/*  Animated Gradient Background */
 html, body {
   min-height: 100%;
   overflow-x: hidden;
@@ -57,7 +57,7 @@ body {
 }
 .animate-fade-in { animation: fade-in 1.2s ease-out forwards; }
 
-/* 🧊 Universal Glass Card Design */
+/* Universal Glass Card Design */
 .glass-card {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(18px);
@@ -69,7 +69,7 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-/* 🌟 Universal Heading Style with Animations */
+/*  Universal Heading Style with Animations */
 .page-heading {
   position: relative;
   text-align: center;
@@ -121,7 +121,7 @@ body {
   animation-delay: 0.5s;
 }
 
-/* 🔹 Heading Animations */
+/*  Heading Animations */
 @keyframes heading-fade-in {
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -132,7 +132,7 @@ body {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* 💎 Buttons (Add / Delete / Submit) */
+/*  Buttons (Add / Delete / Submit) */
 .btn-primary {
   background: linear-gradient(to right, #004080, #2563eb);
   color: white;
@@ -162,14 +162,14 @@ body {
   box-shadow: 0 6px 15px rgba(239,68,68,0.3);
 }
 
-/* 📱 Layout Utility */
+/*  Layout Utility */
 .page-container {
   max-width: 72rem;
   margin: 0 auto;
   padding: 3rem 1rem;
 }
 
-/* 🏫 Logo + College Name Animations */
+/*  Logo + College Name Animations */
 .logo-animate {
   animation: logo-float 3s ease-in-out infinite, logo-glow-pulse 2s ease-in-out infinite;
 }
@@ -197,7 +197,7 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 📱 Add Button Responsiveness */
+/*  Add Button Responsiveness */
 .add-btn-desktop { display: none; }
 .add-btn-mobile { display: flex; position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 50; }
 @media (min-width: 640px) { 
@@ -205,7 +205,7 @@ body {
   .add-btn-mobile { display: none; }
 }
 
-/* 📱 Mobile Nav Scroll */
+/*  Mobile Nav Scroll */
 .mobile-nav-scroll {
   display: flex;
   overflow-x: auto;

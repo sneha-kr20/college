@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 include 'tailwind.php';
-include 'components.php'; // add_button()
+include 'components.php'; 
 
 $searchTerm = strtolower(trim($_GET['search'] ?? ''));
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -39,8 +39,7 @@ $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin'
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scholarship Students</title>
 </head>
-<body class="min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden
-             bg-gradient-to-br from-blue-50 via-white to-yellow-50">
+<body class="min-h-screen flex flex-col font-sans text-gray-800">
 
 <!-- Sticky Header -->
 <header class="sticky top-0 z-50 backdrop-blur-lg bg-white/70 border-b border-gray-200 shadow-sm">
