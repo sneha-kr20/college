@@ -1,8 +1,12 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include 'db.php';
-include 'tailwind.php';
-
+include 'tailwind.php';  
+include 'components.php';
+include 'header.php';
+   
 $allowed_roles = ['admin','teacher','professor','principal','director'];
 $result = $conn->query("SELECT id, title, content, file_path, created_at FROM news ORDER BY created_at DESC");
 ?>
@@ -15,33 +19,6 @@ $result = $conn->query("SELECT id, title, content, file_path, created_at FROM ne
 </head>
 
 <body class="min-h-screen flex flex-col text-gray-800 font-inter">
-
-  <!-- Sticky Header -->
-  <header class="sticky top-0 z-50 backdrop-blur-lg bg-white/70 border-b border-gray-200 shadow-sm fade-in-up">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-      
-      <!-- Back Button -->
-      <a href="index.php" 
-         class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md text-gray-600 hover:text-white hover:bg-collegeblue transition-all duration-300 btn-hover">
-         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-              stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-         </svg>
-      </a>
-
-      <!-- Add Button -->
-      <?php if (isset($_SESSION['role']) && in_array($_SESSION['role'], $allowed_roles)): ?>
-        <a href="news_add.php"
-           class="hidden sm:inline-flex items-center gap-2 bg-collegeblue text-white font-semibold text-sm px-6 py-2.5 rounded-full shadow-md hover:shadow-lg hover:bg-blue-800 transition-all duration-300 btn-hover">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-               stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Add Notice
-        </a>
-      <?php endif; ?>
-    </div>
-  </header>
 
   <!-- Main Section -->
   <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-10">

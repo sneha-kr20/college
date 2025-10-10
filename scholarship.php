@@ -1,8 +1,12 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 include 'db.php';
 include 'tailwind.php';
-include 'components.php'; 
+include 'components.php';
+include 'header.php'; // Header handles desktop menu
 
 $searchTerm = strtolower(trim($_GET['search'] ?? ''));
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -30,46 +34,28 @@ if ($searchTerm !== '') {
 $stmt->execute();
 $result = $stmt->get_result();
 
-$isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin','professor','teacher','principal','director']);
+$allowed_roles = ['admin','teacher','professor','principal','director'];
+$isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], $allowed_roles);
+
+// Add link for this page
+$add_link = 'scholarship_add.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scholarship Students</title>
+<title>Scholarship Students - Jehal Prasad TTC</title>
 </head>
 <body class="min-h-screen flex flex-col font-sans text-gray-800">
-
-<!-- Sticky Header -->
-<header class="sticky top-0 z-50 backdrop-blur-lg bg-white/70 border-b border-gray-200 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    
-    <!-- Back Button -->
-    <a href="index.php"
-       class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-gray-200 
-              shadow-sm hover:shadow-md text-gray-600 hover:text-white hover:bg-collegeblue 
-              transition-all duration-300">
-       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-       </svg>
-    </a>
-
-    <!-- Add Button (Desktop + Mobile handled inside function) -->
-    <?php if ($isPrivileged): ?>
-      <?php add_button('scholarship_add.php', '+ Add Student'); ?>
-    <?php endif; ?>
-  </div>
-</header>
 
 <div class="max-w-7xl mx-auto px-4 py-10">
 
   <!-- Heading -->
   <div class="text-center mb-10 fade-in-up relative">
     <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoom-pulse">
-      <!-- <span class="inline-block animate-float mr-2">🎓</span>  -->
-       Scholarship Students
+      Scholarship Students
     </h1>
     <div class="mt-3">
       <div class="h-1 w-20 mx-auto bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"></div>
@@ -77,7 +63,7 @@ $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin'
     </div>
   </div>
 
-  <!-- Search + Add button (redundant on header but kept for body) -->
+  <!-- Search -->
   <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
     <form method="GET" class="flex flex-1 gap-2">
       <input type="text" name="search" placeholder="Search student name..."
@@ -127,7 +113,6 @@ $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin'
   <div class="md:hidden space-y-4">
     <?php $result->data_seek(0); while($row = $result->fetch_assoc()): ?>
       <div class="glass-card rounded-3xl border border-gray-100 shadow-md hover-lift p-4 relative">
-        <!-- CSS-only toggle -->
         <input type="checkbox" id="toggle-<?= $row['id'] ?>" class="peer hidden">
         <label for="toggle-<?= $row['id'] ?>" class="flex justify-between items-center cursor-pointer">
           <h3 class="font-semibold text-collegeblue"><?= htmlspecialchars($row['name']) ?></h3>
@@ -145,11 +130,10 @@ $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin'
     <?php endwhile; ?>
   </div>
 
-  <!-- Year Pagination (max 4 years) -->
+  <!-- Year Pagination -->
   <div class="flex justify-center items-center gap-3 mt-10">
     <?php if ($page > 1): ?>
-      <a href="?page=<?= $page - 1 ?>" 
-         class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">
+      <a href="?page=<?= $page - 1 ?>" class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">
          ← Older Year
       </a>
     <?php endif; ?>
@@ -159,13 +143,23 @@ $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin'
     </span>
 
     <?php if ($page < $totalYears): ?>
-      <a href="?page=<?= $page + 1 ?>" 
-         class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">
-         Newer Year → 
+      <a href="?page=<?= $page + 1 ?>" class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">
+         Newer Year →
       </a>
     <?php endif; ?>
   </div>
 
 </div>
+
+<!-- Mobile Floating Add Button ONLY -->
+<?php if($isPrivileged): ?>
+  <a href="<?= htmlspecialchars($add_link) ?>" 
+     class="fixed bottom-6 right-6 sm:hidden inline-flex items-center justify-center w-14 h-14 bg-collegeblue text-white rounded-full shadow-lg hover:shadow-xl hover:bg-blue-800 transition-all duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-7 h-7">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
+  </a>
+<?php endif; ?>
+
 </body>
 </html>
