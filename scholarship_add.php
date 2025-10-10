@@ -15,13 +15,14 @@ $message = "";
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = $conn->real_escape_string($_POST['name']);
+    $registration_id = $conn->real_escape_string($_POST['registration_id']);
     $programme = $conn->real_escape_string($_POST['programme']);
     $batch = $conn->real_escape_string($_POST['batch']);
     $year = (int)$_POST['year'];
     $amount = (float)$_POST['amount'];
 
-    $sql = "INSERT INTO scholarship (name, programme, batch, year, amount, added_on)
-            VALUES ('$name', '$programme', '$batch', $year, $amount, NOW())";
+    $sql = "INSERT INTO scholarship (name, registration_id, programme, batch, year, amount, created_at)
+            VALUES ('$name', '$registration_id', '$programme', '$batch', $year, $amount, NOW())";
 
     if ($conn->query($sql) === TRUE) {
         $message = "<p class='text-green-600 font-semibold mb-4 animate-fade-in'>✔ Student added successfully!</p>";
@@ -40,15 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body class="min-h-screen font-sans text-gray-900">
 
-<?php
-$current_page = basename($_SERVER['PHP_SELF']);
-$add_link = 'scholarship_add.php';
-?>
-
 <main class="page-container py-20">
     <div class="max-w-lg mx-auto bg-white rounded-3xl shadow-lg p-8 glass-card animate-fade-in relative">
 
-        <!-- Heading with universal animation -->
+        <!-- Heading -->
         <h1 class="page-heading page-heading-glow text-center mb-6">
             Add Scholarship Student
         </h1>
@@ -58,15 +54,19 @@ $add_link = 'scholarship_add.php';
 
         <!-- Form -->
         <form method="POST" class="flex flex-col gap-4 animate-fade-in">
-            <input type="text" name="name" placeholder="Name" required
+            <input type="text" name="name" placeholder="Full Name" required
                    class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+            
+            <input type="text" name="registration_id" placeholder="Registration Number" required
+                   class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+
             <input type="text" name="programme" placeholder="Programme" required
                    class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
             <input type="text" name="batch" placeholder="Batch" required
                    class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
             <input type="number" name="year" placeholder="Year" required
                    class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
-            <input type="number" step="0.01" name="amount" placeholder="Amount" required
+            <input type="number" step="0.01" name="amount" placeholder="Amount (₹)" required
                    class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
 
             <button type="submit" class="btn-primary w-full text-center">

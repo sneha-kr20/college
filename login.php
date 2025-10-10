@@ -1,28 +1,28 @@
 <?php
 session_start();
-include 'db.php'; 
-include 'tailwind.php';
+include 'db.php';
+include 'components.php'; // optional, not used in login
 $message = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Handle login
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $reg_id = trim($_POST['registration_id']);
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT * FROM users WHERE registration_id = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT id, registration_id, password, name, role FROM users WHERE registration_id = ? LIMIT 1");
     $stmt->bind_param("s", $reg_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
-
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['registration_id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['name'];
 
             header("Location: index.php");
-            exit;
+            exit(); // stop execution after redirect
         } else {
             $message = "Wrong password!";
         }
@@ -39,48 +39,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Login - Jehal Prasad TTC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php include 'tailwind.php'; ?>
 </head>
-<body class="min-h-screen font-sans text-gray-900">
+<body class="min-h-screen flex items-center justify-center">
 
-<main class="page-container py-20">
-    <div class="max-w-sm mx-auto bg-white rounded-3xl shadow-lg p-8 glass-card animate-fade-in relative">
+<div class="max-w-sm w-full bg-white rounded-3xl shadow-lg p-8 glass-card animate-fade-in">
+    <h1 class="page-heading page-heading-glow mb-6 text-center">Login</h1>
 
-        <!-- Close Button -->
-        <a href="index.php" class="absolute top-4 right-4 text-2xl text-gray-600 font-bold hover:text-red-500 transition-transform duration-300 hover:scale-110">&times;</a>
+    <?php if($message): ?>
+        <p class="text-red-600 font-semibold mb-4 animate-fade-in"><?= htmlspecialchars($message) ?></p>
+    <?php endif; ?>
 
-        <!-- Heading -->
-        <h1 class="page-heading page-heading-glow text-center mb-6">
-            User Login
-        </h1>
+    <form method="POST" action="" class="flex flex-col gap-4">
+        <input type="text" name="registration_id" placeholder="Registration ID" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+        <input type="password" name="password" placeholder="Password" required
+               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
+        <button type="submit" class="btn-primary w-full text-center">Login</button>
+    </form>
 
-        <!-- Message -->
-        <?php if($message != ""): ?>
-            <p class="text-red-600 font-semibold mb-4 animate-fade-in">
-                <?= htmlspecialchars($message) ?>
-            </p>
-        <?php endif; ?>
-
-        <!-- Form -->
-        <form method="POST" action="" class="flex flex-col gap-4 animate-fade-in">
-            <input type="text" name="registration_id" placeholder="Registration ID" required
-                   class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
-            <input type="password" name="password" placeholder="Password" required
-                   class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
-
-            <button type="submit" class="btn-primary w-full text-center">
-                Login
-            </button>
-        </form>
-
-        <!-- Forgot Password -->
-        <p class="mt-4 text-center">
-            <a href="reset_password.php" class="text-collegeblue hover:underline font-semibold">
-                Forgot Password?
-            </a>
-        </p>
-
-    </div>
-</main>
+    <p class="mt-4 text-center">
+        <a href="reset_password.php" class="text-collegeblue hover:underline font-semibold">Forgot Password?</a>
+    </p>
+</div>
 
 </body>
 </html>
