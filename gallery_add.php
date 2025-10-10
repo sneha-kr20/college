@@ -1,11 +1,11 @@
 <?php
 session_start();
-include 'db.php'; 
-include 'navigation.php';
+include 'db.php';
 include 'tailwind.php';
-
+include 'components.php'; // contains add_button()
 $message = "";
 
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $caption = trim($_POST['caption']);
 
@@ -20,10 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
             
-            // ===== Generate thumbnail =====
+            // Generate thumbnail
             $thumbFileName = uniqid("thumb_", true) . "." . $fileExt;
             $thumbFilePath = $targetDir . $thumbFileName;
-
             list($width, $height) = getimagesize($targetFilePath);
             $newWidth = 300;
             $newHeight = floor($height * ($newWidth / $width));
@@ -48,18 +47,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             imagedestroy($thumb);
             imagedestroy($source);
 
-            // ===== Insert into DB =====
+            // Insert into DB
             $stmt = $conn->prepare("INSERT INTO gallery (image_path, thumbnail_path, caption) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $targetFilePath, $thumbFilePath, $caption);
             $stmt->execute();
             $stmt->close();
 
-            $message = "<p class='text-green-600 font-semibold mb-4'>✔ Image uploaded successfully!</p>";
+            $message = "<p class='text-green-600 font-semibold mb-4 animate-fade-in'>✔ Image uploaded successfully!</p>";
         } else {
-            $message = "<p class='text-red-600 font-semibold mb-4'>File upload failed.</p>";
+            $message = "<p class='text-red-600 font-semibold mb-4 animate-fade-in'>❌ File upload failed.</p>";
         }
     } else {
-        $message = "<p class='text-red-600 font-semibold mb-4'>⚠ Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.</p>";
+        $message = "<p class='text-red-600 font-semibold mb-4 animate-fade-in'>⚠ Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.</p>";
     }
 }
 ?>
@@ -68,33 +67,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Gallery Image</title>
+    <title>Add Gallery Image - Jehal Prasad TTC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
 </head>
-<body class="bg-gray-50 font-sans flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen font-sans text-gray-900">
 
-<div class="bg-white rounded-xl shadow-lg w-full max-w-md p-8 relative">
-    <a href="gallery.php" class="absolute top-4 right-4 text-2xl text-gray-600 font-bold hover:text-red-500">&times;</a>
-    <h2 class="text-2xl font-bold text-collegeblue mb-6 text-center">Add New Image</h2>
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+$add_link = 'gallery_add.php';
+?>
 
-    <?= $message ?>
+<main class="page-container py-20">
+    <div class="max-w-lg mx-auto bg-white rounded-3xl shadow-lg p-8 glass-card animate-fade-in relative">
 
-    <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
-        <input type="text" name="caption" placeholder="Caption" required
-               class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue">
-        <input type="file" name="image" accept="image/*" required
-               class="w-full p-2 border border-gray-300 rounded-md">
-        <button type="submit" 
-                class="bg-collegeblue text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition-colors">
-            Upload
-        </button>
-    </form>
+        <!-- Heading with universal animation -->
+        <h1 class="page-heading page-heading-glow text-center mb-6">
+            Add New Image
+        </h1>
 
-    <a href="gallery.php" class="mt-4 inline-block text-collegeblue font-semibold hover:underline text-center w-full">
-        Back to Gallery
-    </a>
-</div>
+        <!-- Message -->
+        <?= $message ?>
+
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4 animate-fade-in">
+            <input type="text" name="caption" placeholder="Caption" required
+                   class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-collegeblue hover:shadow-md transition-shadow duration-300">
+            <input type="file" name="image" accept="image/*" required
+                   class="w-full p-2 border border-gray-300 rounded-md hover:shadow-md transition-shadow duration-300">
+            <button type="submit" 
+                    class="btn-primary w-full text-center">
+                Upload
+            </button>
+        </form>
+
+        <!-- Back Button -->
+        <a href="gallery.php" 
+           class="mt-6 inline-block w-full text-center text-collegeblue font-semibold hover:underline">
+           ← Back to Gallery
+        </a>
+    </div>
+</main>
 
 </body>
 </html>
