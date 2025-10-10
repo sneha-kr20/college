@@ -11,12 +11,10 @@ include 'tailwind.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Jehal Prasad Teachers Training College</title>
+  <title>Home-<span class="inline-block animate-float mr-2">Jehal Prasad Teachers Training College</span></title>
 </head>
 
 <body class="bg-gray-50 text-gray-800">
-
-  <!-- Hero Section -->
   <section class="bg-white shadow-lg rounded-b-3xl relative">
     <div class="max-w-7xl mx-auto px-6 py-12 md:py-20 flex flex-col md:flex-row items-center gap-8">
       
@@ -37,7 +35,10 @@ include 'tailwind.php';
         </p>
         <div class="flex flex-col sm:flex-row gap-4 mt-4 justify-center md:justify-start">
   <a href="about.php" class="btn-primary text-center">Learn More</a>
-  <a href="contact.php" class="btn-primary bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-500 hover:to-blue-600">Contact Us</a>
+  <a href="#contactFooter" class="btn-primary bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-500 hover:to-blue-600">
+  Contact Us
+</a>
+
         </div>
       </div>
 
@@ -72,11 +73,8 @@ include 'tailwind.php';
            drop-shadow-lg animate-fade-in">
   “Empowering Teachers, Enriching Education, Enlightening Society.”
 </h3>
-
     </div>
-
   </section>
-
   <?php include 'footer.php'; ?>
 
 </body>

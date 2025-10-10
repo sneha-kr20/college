@@ -6,14 +6,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $page_add_links = [
     'gallery.php' => 'gallery_add.php',
     'news.php' => 'news_add.php',
-    'scholarship.php' => 'scholarship_add.php'
+    'scholarship.php' => 'scholarship_add.php',
 ];
 $add_link = $page_add_links[$current_page] ?? null;
 ?>
 <header class="w-full relative z-50">
 
 <?php if($current_page == 'index.php'): ?>
-<!--  Home Page Header -->
+<!-- 🌟 Home Page Header -->
 <div class="relative overflow-hidden bg-gradient-to-r from-blue-500 via-blue-300 to-blue-600 p-8 md:p-16 text-white shadow-xl">
 
     <!-- Animated Glow Circles -->
@@ -54,33 +54,42 @@ $add_link = $page_add_links[$current_page] ?? null;
 
     </div>
 
-    <!-- Mobile Hamburger + User -->
-    <div class="flex md:hidden justify-between items-center mt-6">
-        <button id="mobile-menu-button" class="focus:outline-none text-white">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2"
-                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
-        <div class="flex items-center space-x-3">
-            <?php if(isset($_SESSION['user'])): ?>
-                <span class="text-sm truncate max-w-[120px]"><?= htmlspecialchars($_SESSION['name'] ?? 'User'); ?></span>
-                <a href="logout.php" class="btn-danger text-sm">Logout</a>
-            <?php else: ?>
-                <a href="login.php" class="btn-primary text-sm">Login</a>
-            <?php endif; ?>
-        </div>
-    </div>
+   <!-- ✅ Mobile Navigation (Pure Tailwind toggle, no JS) -->
+    <div class="md:hidden mt-6">
 
-    <!-- Mobile Menu Vertical Wrap -->
-    <div id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col gap-2 bg-blue-800 rounded-lg p-2">
+      <!-- Hidden checkbox toggle -->
+      <input type="checkbox" id="menu-toggle" class="hidden peer" />
+
+      <!-- Header row (hamburger + user) -->
+      <div class="flex justify-between items-center">
+        <label for="menu-toggle" class="cursor-pointer text-white">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </label>
+
+        <div class="flex items-center space-x-3">
+          <?php if(isset($_SESSION['user'])): ?>
+            <span class="text-sm truncate max-w-[120px]"><?= htmlspecialchars($_SESSION['name'] ?? 'User'); ?></span>
+            <a href="logout.php" class="btn-danger text-sm">Logout</a>
+          <?php else: ?>
+            <a href="login.php" class="btn-primary text-sm">Login</a>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <!-- Menu items -->
+      <div class="hidden peer-checked:flex flex-col gap-2 bg-blue-800 rounded-lg p-2 mt-4 z-50 relative">
         <a href="index.php" class="px-4 py-2 rounded-lg text-center hover:bg-yellow-400 hover:text-blue-800 transition">Home</a>
         <a href="scholarship.php" class="px-4 py-2 rounded-lg text-center hover:bg-yellow-400 hover:text-blue-800 transition">Scholarship</a>
         <a href="gallery.php" class="px-4 py-2 rounded-lg text-center hover:bg-yellow-400 hover:text-blue-800 transition">Gallery</a>
         <a href="news.php" class="px-4 py-2 rounded-lg text-center hover:bg-yellow-400 hover:text-blue-800 transition">Notice</a>
         <a href="programmes.php" class="px-4 py-2 rounded-lg text-center hover:bg-yellow-400 hover:text-blue-800 transition">Programme</a>
         <a href="about.php" class="px-4 py-2 rounded-lg text-center hover:bg-yellow-400 hover:text-blue-800 transition">About Us</a>
+      </div>
+
     </div>
 
 </div>
@@ -108,13 +117,4 @@ $add_link = $page_add_links[$current_page] ?? null;
     ?>
 </div>
 <?php endif; ?>
-
-<script>
-const menuButton = document.getElementById('mobile-menu-button');
-const mobileMenu = document.getElementById('mobile-menu');
-if(menuButton){
-    menuButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-}
-</script>
+</header>

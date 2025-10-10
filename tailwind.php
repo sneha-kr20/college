@@ -26,6 +26,7 @@ tailwind.config = {
 html, body {
   min-height: 100%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 body {
   background: linear-gradient(135deg, #f8fafc, #e0f2fe, #fef9c3);
