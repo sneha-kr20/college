@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 include 'tailwind.php';
-include 'components.php'; // contains add_button()
+include 'components.php'; 
 $message = "";
 
 // Handle form submission
@@ -79,8 +79,6 @@ $add_link = 'gallery_add.php';
 
 <main class="page-container py-20">
     <div class="max-w-lg mx-auto bg-white rounded-3xl shadow-lg p-8 glass-card animate-fade-in relative">
-
-        <!-- Heading with universal animation -->
         <h1 class="page-heading page-heading-glow text-center mb-6">
             Add New Image
         </h1>

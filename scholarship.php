@@ -6,38 +6,48 @@ if (session_status() === PHP_SESSION_NONE) {
 include 'db.php';
 include 'tailwind.php';
 include 'components.php';
-include 'header.php'; // Header handles desktop menu
+include 'header.php';
 
+// Search
 $searchTerm = strtolower(trim($_GET['search'] ?? ''));
+
+// Pagination variables
+$perPage = 10; // students per page
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $perPage;
 
-// Get 4 most recent years
-$yearsResult = $conn->query("SELECT DISTINCT year FROM scholarship ORDER BY year DESC LIMIT 4");
-$years = [];
-while ($r = $yearsResult->fetch_assoc()) { $years[] = $r['year']; }
-
-$totalYears = count($years);
-$currentYear = $years[$page - 1] ?? $years[0] ?? date('Y');
-
-// Fetch scholarship students
+// Count total records for pagination
+$countSql = "SELECT COUNT(*) as total FROM scholarship";
 if ($searchTerm !== '') {
-    $stmt = $conn->prepare("
-        SELECT * FROM scholarship 
-        WHERE year = ? AND LOWER(name) LIKE CONCAT('%', ?, '%') 
-        ORDER BY name ASC
-    ");
-    $stmt->bind_param("is", $currentYear, $searchTerm);
+    $countSql .= " WHERE LOWER(name) LIKE ?";
+    $stmtCount = $conn->prepare($countSql);
+    $likeTerm = "%$searchTerm%";
+    $stmtCount->bind_param("s", $likeTerm);
+    $stmtCount->execute();
+    $totalResult = $stmtCount->get_result()->fetch_assoc();
+    $stmtCount->close();
 } else {
-    $stmt = $conn->prepare("SELECT * FROM scholarship WHERE year = ? ORDER BY name ASC");
-    $stmt->bind_param("i", $currentYear);
+    $totalResult = $conn->query($countSql)->fetch_assoc();
+}
+$totalRecords = $totalResult['total'];
+$totalPages = ceil($totalRecords / $perPage);
+
+// Fetch current page records
+if ($searchTerm !== '') {
+    $stmt = $conn->prepare("SELECT * FROM scholarship WHERE LOWER(name) LIKE ? ORDER BY name ASC LIMIT ? OFFSET ?");
+    $stmt->bind_param("sii", $likeTerm, $perPage, $offset);
+} else {
+    $stmt = $conn->prepare("SELECT * FROM scholarship ORDER BY name ASC LIMIT ? OFFSET ?");
+    $stmt->bind_param("ii", $perPage, $offset);
 }
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Privileged roles
 $allowed_roles = ['admin','teacher','professor','principal','director'];
 $isPrivileged = isset($_SESSION['role']) && in_array($_SESSION['role'], $allowed_roles);
 
-// Add link for this page
+// Add link for mobile floating button
 $add_link = 'scholarship_add.php';
 ?>
 
@@ -52,7 +62,7 @@ $add_link = 'scholarship_add.php';
 
 <div class="max-w-7xl mx-auto px-4 py-10">
 
-  <!-- Heading -->
+<!-- Heading -->
   <div class="text-center mb-10 fade-in-up relative">
     <h1 class="text-4xl md:text-5xl font-extrabold text-collegeblue tracking-tight animate-zoom-pulse">
       Scholarship Students
@@ -84,7 +94,6 @@ $add_link = 'scholarship_add.php';
           <th class="px-4 py-2 text-left">Registration No</th>
           <th class="px-4 py-2 text-left">Programme</th>
           <th class="px-4 py-2 text-left">Batch</th>
-          <th class="px-4 py-2 text-left">Year</th>
           <th class="px-4 py-2 text-left">Amount (₹)</th>
           <th class="px-4 py-2 text-left">Added On</th>
           <?php if($isPrivileged): ?><th class="px-4 py-2 text-left">Delete</th><?php endif; ?>
@@ -98,7 +107,6 @@ $add_link = 'scholarship_add.php';
               <td class="px-4 py-2"><?= htmlspecialchars($row['registration_id'] ?? '-') ?></td>
               <td class="px-4 py-2"><?= htmlspecialchars($row['programme']) ?></td>
               <td class="px-4 py-2"><?= htmlspecialchars($row['batch']) ?></td>
-              <td class="px-4 py-2"><?= htmlspecialchars($row['year']) ?></td>
               <td class="px-4 py-2">₹<?= number_format($row['amount'], 2) ?></td>
               <td class="px-4 py-2"><?= htmlspecialchars($row['created_at'] ?? '-') ?></td>
               <?php if($isPrivileged): ?>
@@ -111,17 +119,16 @@ $add_link = 'scholarship_add.php';
             </tr>
           <?php endwhile; ?>
         <?php else: ?>
-          <tr><td colspan="<?= $isPrivileged ? 8 : 7 ?>" class="text-center py-6 text-gray-500">No students found.</td></tr>
+          <tr><td colspan="<?= $isPrivileged ? 7 : 6 ?>" class="text-center py-6 text-gray-500">No students found.</td></tr>
         <?php endif; ?>
       </tbody>
     </table>
   </div>
 
- <!-- Mobile Cards -->
-<div class="md:hidden space-y-4">
+  <!-- Mobile Cards -->
+  <div class="md:hidden space-y-4">
     <?php $result->data_seek(0); while($row = $result->fetch_assoc()): ?>
       <div class="glass-card rounded-3xl border border-gray-100 shadow-md hover-lift p-4 relative">
-        
         <input type="checkbox" id="toggle-<?= $row['id'] ?>" class="peer hidden">
         <label for="toggle-<?= $row['id'] ?>" class="flex justify-between items-center cursor-pointer">
           <h3 class="font-semibold text-collegeblue"><?= htmlspecialchars($row['name']) ?></h3>
@@ -132,11 +139,9 @@ $add_link = 'scholarship_add.php';
           <p><strong>Reg. No:</strong> <?= htmlspecialchars($row['registration_id'] ?? '-') ?></p>
           <p><strong>Programme:</strong> <?= htmlspecialchars($row['programme']) ?></p>
           <p><strong>Batch:</strong> <?= htmlspecialchars($row['batch']) ?></p>
-          <p><strong>Year:</strong> <?= htmlspecialchars($row['year']) ?></p>
           <p><strong>Amount:</strong> ₹<?= number_format($row['amount'], 2) ?></p>
           <p><strong>Added On:</strong> <?= htmlspecialchars($row['created_at'] ?? '-') ?></p>
 
-          <!-- Delete button at bottom -->
           <?php if($isPrivileged): ?>
           <a href="delete.php?type=scholarship&id=<?= $row['id'] ?>" 
              onclick="return confirm('Are you sure you want to delete this student?');"
@@ -147,25 +152,20 @@ $add_link = 'scholarship_add.php';
         </div>
       </div>
     <?php endwhile; ?>
-</div>
+  </div>
 
-
-  <!-- Year Pagination -->
-  <div class="flex justify-center items-center gap-3 mt-10">
-    <?php if ($page > 1): ?>
-      <a href="?page=<?= $page - 1 ?>" class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">
-         ← Older Year
-      </a>
+  <!-- Pagination -->
+  <div class="flex justify-center items-center gap-2 mt-6">
+    <?php if($page > 1): ?>
+        <a href="?page=<?= $page - 1 ?>&search=<?= urlencode($_GET['search'] ?? '') ?>" 
+           class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">Prev</a>
     <?php endif; ?>
 
-    <span class="text-gray-700 font-medium">
-      Page <?= $page ?> of <?= $totalYears ?>
-    </span>
+    <span class="px-3 py-2 text-gray-700 font-medium">Page <?= $page ?> of <?= $totalPages ?></span>
 
-    <?php if ($page < $totalYears): ?>
-      <a href="?page=<?= $page + 1 ?>" class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">
-         Newer Year →
-      </a>
+    <?php if($page < $totalPages): ?>
+        <a href="?page=<?= $page + 1 ?>&search=<?= urlencode($_GET['search'] ?? '') ?>" 
+           class="px-4 py-2 bg-collegeblue text-white rounded-full hover:bg-blue-800 transition">Next</a>
     <?php endif; ?>
   </div>
 

@@ -17,10 +17,8 @@ $add_link = $page_add_links[$current_page] ?? null;
 <header class="w-full relative z-50">
 
 <?php if ($current_page == 'index.php'): ?>
-<!-- 🏠 Home Page Header -->
+<!--  Home Page Header -->
 <div class="relative overflow-hidden bg-gradient-to-r from-blue-500 via-blue-300 to-blue-600 p-8 md:p-16 text-white shadow-xl">
-
-    <!-- Animated Background Glow -->
     <div class="absolute top-[-50px] left-[-50px] w-72 h-72 rounded-full bg-yellow-400/20 blur-3xl animate-float"></div>
     <div class="absolute bottom-[-60px] right-[-40px] w-80 h-80 rounded-full bg-pink-400/20 blur-3xl animate-float delay-2000"></div>
 
@@ -97,10 +95,10 @@ $add_link = $page_add_links[$current_page] ?? null;
 </div>
 
 <?php else: ?>
-<!-- 📄 Other Pages Header -->
+<!-- Other Pages Header -->
 <div class="sticky top-0 z-50 backdrop-blur-xl bg-white/70 border-b border-gray-200 shadow-sm relative flex justify-between items-center px-4 py-4">
 
-    <!-- 🍔 Hamburger Menu -->
+    <!-- Hamburger Menu -->
     <div class="relative">
         <input type="checkbox" id="menu-toggle" class="hidden peer" />
         <label for="menu-toggle" class="flex items-center justify-center w-12 h-12 rounded-2xl 
@@ -125,7 +123,7 @@ $add_link = $page_add_links[$current_page] ?? null;
         </div>
     </div>
 
-    <!-- ➕ Add Button -->
+    <!-- Add Button -->
     <?php 
     $skip_mobile_pages = ['gallery.php', 'scholarship.php', 'news.php']; // only disable mobile button on these pages
 
