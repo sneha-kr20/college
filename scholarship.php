@@ -87,6 +87,7 @@ $add_link = 'scholarship_add.php';
           <th class="px-4 py-2 text-left">Year</th>
           <th class="px-4 py-2 text-left">Amount (₹)</th>
           <th class="px-4 py-2 text-left">Added On</th>
+          <?php if($isPrivileged): ?><th class="px-4 py-2 text-left">Delete</th><?php endif; ?>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200">
@@ -100,24 +101,33 @@ $add_link = 'scholarship_add.php';
               <td class="px-4 py-2"><?= htmlspecialchars($row['year']) ?></td>
               <td class="px-4 py-2">₹<?= number_format($row['amount'], 2) ?></td>
               <td class="px-4 py-2"><?= htmlspecialchars($row['created_at'] ?? '-') ?></td>
+              <?php if($isPrivileged): ?>
+              <td class="px-4 py-2">
+                <a href="delete.php?type=scholarship&id=<?= $row['id'] ?>" 
+                   onclick="return confirm('Are you sure you want to delete this student?');"
+                   class="text-red-600 font-bold hover:text-red-800">×</a>
+              </td>
+              <?php endif; ?>
             </tr>
           <?php endwhile; ?>
         <?php else: ?>
-          <tr><td colspan="7" class="text-center py-6 text-gray-500">No students found.</td></tr>
+          <tr><td colspan="<?= $isPrivileged ? 8 : 7 ?>" class="text-center py-6 text-gray-500">No students found.</td></tr>
         <?php endif; ?>
       </tbody>
     </table>
   </div>
 
-  <!-- Mobile Cards -->
-  <div class="md:hidden space-y-4">
+ <!-- Mobile Cards -->
+<div class="md:hidden space-y-4">
     <?php $result->data_seek(0); while($row = $result->fetch_assoc()): ?>
       <div class="glass-card rounded-3xl border border-gray-100 shadow-md hover-lift p-4 relative">
+        
         <input type="checkbox" id="toggle-<?= $row['id'] ?>" class="peer hidden">
         <label for="toggle-<?= $row['id'] ?>" class="flex justify-between items-center cursor-pointer">
           <h3 class="font-semibold text-collegeblue"><?= htmlspecialchars($row['name']) ?></h3>
           <span class="text-collegeblue font-bold text-lg transition-transform duration-300 peer-checked:rotate-45">+</span>
         </label>
+
         <div class="mt-2 text-sm space-y-1 max-h-0 overflow-hidden transition-all duration-500 peer-checked:max-h-96">
           <p><strong>Reg. No:</strong> <?= htmlspecialchars($row['registration_id'] ?? '-') ?></p>
           <p><strong>Programme:</strong> <?= htmlspecialchars($row['programme']) ?></p>
@@ -125,10 +135,20 @@ $add_link = 'scholarship_add.php';
           <p><strong>Year:</strong> <?= htmlspecialchars($row['year']) ?></p>
           <p><strong>Amount:</strong> ₹<?= number_format($row['amount'], 2) ?></p>
           <p><strong>Added On:</strong> <?= htmlspecialchars($row['created_at'] ?? '-') ?></p>
+
+          <!-- Delete button at bottom -->
+          <?php if($isPrivileged): ?>
+          <a href="delete.php?type=scholarship&id=<?= $row['id'] ?>" 
+             onclick="return confirm('Are you sure you want to delete this student?');"
+             class="inline-block mt-3 w-full text-center bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-600 transition">
+            × Delete
+          </a>
+          <?php endif; ?>
         </div>
       </div>
     <?php endwhile; ?>
-  </div>
+</div>
+
 
   <!-- Year Pagination -->
   <div class="flex justify-center items-center gap-3 mt-10">
@@ -154,7 +174,7 @@ $add_link = 'scholarship_add.php';
 <!-- Mobile Floating Add Button ONLY -->
 <?php if($isPrivileged): ?>
   <a href="<?= htmlspecialchars($add_link) ?>" 
-     class="fixed bottom-6 right-6 sm:hidden inline-flex items-center justify-center w-14 h-14 bg-collegeblue text-white rounded-full shadow-lg hover:shadow-xl hover:bg-blue-800 transition-all duration-300">
+     class="fixed bottom-6 right-6 sm:hidden z-50 inline-flex items-center justify-center w-14 h-14 bg-collegeblue text-white rounded-full shadow-lg hover:shadow-xl hover:bg-blue-800 transition-all duration-300">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-7 h-7">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
     </svg>
